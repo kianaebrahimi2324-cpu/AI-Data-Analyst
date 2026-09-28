@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>AI Data Analyst</title>
+
+    <!-- Cache-busting version -->
+    <link
+        rel="stylesheet"
+        href="/static/style.css?v=6"
+    >
+</head>
+
+<body>
+
+    <div class="page-background"></div>
+
+    <main class="app-container">
+
+        <!-- ==================================================
+             HERO
+        =================================================== -->
+
+        <header class="hero">
+
+            <div class="hero-brand-line">
+
+                <div class="brand-icon">
+                    AI
+                </div>
+
+                <span class="hero-platform-name">
+                    MULTI-AGENT ANALYTICS PLATFORM
+                </span>
+
+            </div>
+
+
+            <h1>
+                AI Data Analyst
+            </h1>
+
+
+            <p class="hero-description">
+                Upload a dataset and generate a clear, reviewed analysis with useful insights and visualizations.
+            </p>
+
+        </header>
+
+
+        <!-- ==================================================
+             UPLOAD
+        =================================================== -->
+
+        <section class="upload-card">
+
+            <div class="section-heading">
+
+                <span class="section-kicker">
+                    NEW ANALYSIS
+                </span>
+
+                <h2>
+                    Start Dataset Analysis
+                </h2>
+
+                <p>
+                    Upload your dataset and optionally select
+                    a target column for a more focused analysis.
+                </p>
+
+            </div>
+
+
+            <div class="upload-grid">
+
+                <!-- Dataset -->
+
+                <div class="form-group">
+
+                    <label for="dataset-file">
+                        Dataset File
+                    </label>
+
+                    <div class="input-shell">
+
+                        <input
+                            type="file"
+                            id="dataset-file"
+                            accept=".csv,.tsv,.txt,.xlsx,.xls,.parquet,.json,.jsonl,.ndjson"
+                        >
+
+                    </div>
+
+                    <small class="field-help">
+                        CSV, Excel, Parquet, JSON and text formats · up to 50 MB
+                    </small>
+
+                </div>
+
+
+                <!-- Target -->
+
+                <div class="form-group">
+
+                    <label for="target-column">
+                        Target Column
+                    </label>
+
+                    <select id="target-column">
+
+                        <option value="">
+                            No target selected
+                        </option>
+
+                    </select>
+
+                    <small class="field-help">
+                        Optional — leave empty for general exploratory analysis
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="upload-actions">
+
+                <button
+                    id="analyze-button"
+                    class="primary-button"
+                >
+                    Start Analysis
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             STATUS
+        =================================================== -->
+
+        <section
+            id="status-section"
+            class="status-card hidden"
+        >
+
+            <div class="status-dot"></div>
+
+            <p id="status-message">
+                Preparing analysis...
+            </p>
+
+        </section>
+
+
+        <!-- ==================================================
+             DASHBOARD
+        =================================================== -->
+
+        <section
+            id="dashboard-section"
+            class="dashboard hidden"
+        >
+
+            <!-- Dashboard Header -->
+
+            <div class="dashboard-header">
+
+                <div>
+
+                    <p class="eyebrow">
+                        ANALYSIS RESULTS
+                    </p>
+
+                    <h2>
+                        Analysis Dashboard
+                    </h2>
+
+                    <p
+                        id="dataset-name"
+                        class="dataset-name"
+                    ></p>
+
+                </div>
+
+
+                <div class="review-box">
+
+                    <span
+                        id="review-status"
+                        class="status-badge"
+                    ></span>
+
+                    <span
+                        id="quality-score"
+                        class="quality-score"
+                    ></span>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==================================================
+                 KPI CARDS
+            =================================================== -->
+
+            <div
+                id="summary-cards"
+                class="kpi-grid"
+            ></div>
+
+
+            <!-- ==================================================
+                 DATA QUALITY
+            =================================================== -->
+
+            <section class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div class="card-title-group">
+
+                        <span class="section-number">
+                            01
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                Data Quality
+                            </h3>
+
+                            <p>
+                                Dataset integrity and potential issues
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="data-quality"
+                    class="quality-grid"
+                ></div>
+
+            </section>
+
+
+            <!-- ==================================================
+                 NUMERICAL ANALYSIS
+            =================================================== -->
+
+            <section class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div class="card-title-group">
+
+                        <span class="section-number">
+                            02
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                Numerical Analysis
+                            </h3>
+
+                            <p>
+                                Key descriptive statistics
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table class="analysis-table">
+
+                        <thead>
+
+                            <tr>
+                                <th>Variable</th>
+                                <th>Mean</th>
+                                <th>Median</th>
+                                <th>Std.</th>
+                                <th>Min</th>
+                                <th>Max</th>
+                                <th>Outliers</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="numerical-table-body"></tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==================================================
+                 CORRELATIONS
+            =================================================== -->
+
+            <section class="two-column-layout">
+
+                <div class="dashboard-card">
+
+                    <div class="card-header">
+
+                        <div class="card-title-group">
+
+                            <span class="section-number">
+                                03
+                            </span>
+
+                            <div>
+
+                                <h3>
+                                    Top Correlations
+                                </h3>
+
+                                <p>
+                                    Strongest observed linear relationships
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="correlation-list"
+                        class="correlation-list"
+                    ></div>
+
+                </div>
+
+
+                <div class="dashboard-card">
+
+                    <div class="card-header">
+
+                        <div class="card-title-group">
+
+                            <div>
+
+                                <h3>
+                                    Correlation Heatmap
+                                </h3>
+
+                                <p>
+                                    Overview of numerical relationships
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="correlation-chart"
+                        class="featured-chart"
+                    ></div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==================================================
+                 TARGET
+            =================================================== -->
+
+            <section
+                id="target-section"
+                class="two-column-layout"
+            >
+
+                <div class="dashboard-card">
+
+                    <div class="card-header">
+
+                        <div class="card-title-group">
+
+                            <span class="section-number">
+                                04
+                            </span>
+
+                            <div>
+
+                                <h3>
+                                    Target Analysis
+                                </h3>
+
+                                <p>
+                                    Target structure and distribution
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div id="target-summary"></div>
+
+                </div>
+
+
+                <div class="dashboard-card">
+
+                    <div class="card-header">
+
+                        <div class="card-title-group">
+
+                            <div>
+
+                                <h3>
+                                    Target Distribution
+                                </h3>
+
+                                <p>
+                                    Visual overview of the selected target
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="target-chart"
+                        class="featured-chart"
+                    ></div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==================================================
+                 RELEVANT CHARTS
+            =================================================== -->
+
+            <section class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div class="card-title-group">
+
+                        <span class="section-number">
+                            05
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                Relevant Feature Charts
+                            </h3>
+
+                            <p>
+                                Selected from features most related to the target
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="primary-charts"
+                    class="chart-grid"
+                ></div>
+
+            </section>
+
+
+            <!-- ==================================================
+                 EXPLORE
+            =================================================== -->
+
+            <section class="dashboard-card explore-card">
+
+                <div class="card-header">
+
+                    <div class="card-title-group">
+
+                        <span class="section-number">
+                            06
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                Explore More Charts
+                            </h3>
+
+                            <p>
+                                Explore individual variables when needed
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="chart-selector">
+
+                    <div class="form-group">
+
+                        <label for="chart-variable">
+                            Variable
+                        </label>
+
+                        <select id="chart-variable"></select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="chart-type">
+                            Chart Type
+                        </label>
+
+                        <select id="chart-type">
+
+                            <option value="distribution">
+                                Distribution
+                            </option>
+
+                            <option value="boxplot">
+                                Boxplot
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <button
+                        id="show-chart-button"
+                        class="secondary-button"
+                    >
+                        Show Chart
+                    </button>
+
+
+                    <button
+                        id="clear-chart-button"
+                        class="ghost-button"
+                    >
+                        Clear
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="custom-chart-area"
+                    class="custom-chart-area"
+                ></div>
+
+            </section>
+
+
+            <!-- ==================================================
+                 FULL REPORT
+            =================================================== -->
+
+            <section class="dashboard-card">
+
+                <details class="report-details">
+
+                    <summary>
+
+                        <div class="report-summary-left">
+
+                            <span class="section-number">
+                                07
+                            </span>
+
+                            <div>
+
+                                <strong>
+                                    Full Analysis Report
+                                </strong>
+
+                                <p>
+                                    Detailed reviewed interpretation
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <span class="expand-text">
+                            View report
+                        </span>
+
+                    </summary>
+
+
+                    <div
+                        id="report-content"
+                        class="full-report"
+                    ></div>
+
+                </details>
+
+            </section>
+
+        </section>
+
+    </main>
+
+
+    <script src="/static/app.js?v=6"></script>
+
+</body>
+
+</html>

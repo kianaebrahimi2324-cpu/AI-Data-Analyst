@@ -1,0 +1,34 @@
+# AI / Agents
+langchain
+langchain-experimental
+langchain-groq
+langgraph
+
+# Environment
+python-dotenv
+
+# Data
+pandas
+numpy
+scikit-learn
+
+# Visualization
+matplotlib
+
+# Web API
+fastapi
+uvicorn[standard]
+jinja2
+python-multipart
+
+# Report rendering / security
+markdown
+bleach
+
+# Validation
+pydantic
+
+# Dataset formats
+openpyxl
+xlrd
+pyarrow
